@@ -1,6 +1,9 @@
+[![process_test_h5_files](https://github.com/openmc-data-storage/ENDF-B-VII.1-NNDC/actions/workflows/process_test_nuc_data.yml/badge.svg)](https://github.com/openmc-data-storage/ENDF-B-VII.1-NNDC/actions/workflows/process_test_nuc_data.yml)
 
-A template repository that facilitates the creation of nuclear data process
-repositories.
+Nuclear data from the ENDF-B-VII.1-NNDC library in h5 file format for use in OpenMC.
 
-Simply template this repository and change the [docker run command](https://github.com/openmc-data-storage/nuc_data_processing_template/blob/0e660616e40aebf8e2493d16f9abbad1c1dc5a9d/.github/workflows/process_test_nuc_data.yml#L25)
-so that the correct nuclear data processing script runs
+Automatically processed in the OpenMC h5 file format using GitHub actions CI pipline.
+
+The generated h5 files have also be tested in simulations using OpenMC.
+
+Interfaces with the [openmc_data_downloader](https://github.com/openmc-data-storage/openmc_data_downloader) to provide easy nuclear data downloading.
