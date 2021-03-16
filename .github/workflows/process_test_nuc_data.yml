@@ -1,0 +1,39 @@
+name: process_test_h5_files
+on:  
+  push:    
+    branches:
+    - main
+  pull_request:    
+    branches:
+    - main
+
+jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@master
+        with:
+          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+          fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+      - name: Create custom readme
+        run: |
+            python readme_writer.py
+            cat README.md
+      - name: Build and test with Docker
+        run: |
+            docker build --tag nuc_data_maker .
+            rm -rf h5_files
+            docker run -v /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}:/share nuc_data_maker /bin/bash -c "python data/convert_*****.py -d /share/h5_files -r ***** && pytest -rP tests/test_xs_in_simulations.py"
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add h5_files/*.h5
+          git commit -m "Added h5 cross sections (bot commit)" -a
+          git add README.md
+          git commit -m "Added readme with repo name (bot commit)" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
